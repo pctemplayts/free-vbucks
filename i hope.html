@@ -1,0 +1,46 @@
+const express = require('express');
+const axios = require('axios');
+const app = express();
+
+app.use(express.json());
+
+const validateCode = async (code) => {
+    try {
+        const response = await axios.post('https://www.fortnite.com/vbuckscard/validate', { code });
+        return response.data.isValid; // Adjust based on actual response structure
+    } catch (error) {
+        console.error('Error validating code:', error);
+        return false;
+    }
+};
+
+const redeemCode = async (code) => {
+    try {
+        const response = await axios.post('https://www.fortnite.com/vbuckscard/redeem', { code });
+        return response.data.success; // Adjust based on actual response structure
+    } catch (error) {
+        console.error('Error redeeming code:', error);
+        return false;
+    }
+};
+
+app.post('/generate-and-redeem', async (req, res) => {
+    const codes = req.body.codes; // Assume an array of codes
+    const results = [];
+
+    for (const code of codes) {
+        const isValid = await validateCode(code);
+        if (isValid) {
+            const isRedeemed = await redeemCode(code);
+            results.push({ code, redeemed: isRedeemed });
+        } else {
+            results.push({ code, redeemed: false });
+        }
+    }
+
+    res.json(results);
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});

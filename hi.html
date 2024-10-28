@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Code Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #codes { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Random Code Generator</h1>
+    <button id="generateBtn">Generate Codes</button>
+    <div id="codes"></div>
+
+    <script>
+        function generateRandomCode(length) {
+            const chars = '';
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const codes = [];
+            for (let i = 0; i < 100000; i++) {
+                codes.push(generateRandomCode(16)); // Adjust length as needed
+            }
+            document.getElementById('codes').innerText = codes.join('\n');
+        });
+    </script>
+</body>
+</html>
